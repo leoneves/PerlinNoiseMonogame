@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -65,9 +65,9 @@ namespace PerlinNoiseMonogame.DesktopGL
                 var columnOfImgages = new Texture2D[map_height];
                 for (int y=1; y <= map_height; y++)
                 {
-                    columnOfImgages[y] = ChooseTile(perlinNoise[x][y]);
+                    columnOfImgages[y-1] = ChooseTile(perlinNoise[x-1][y-1]);
                 }
-                images[x] = columnOfImgages;
+                images[x-1] = columnOfImgages;
             }
         }
 
@@ -75,9 +75,9 @@ namespace PerlinNoiseMonogame.DesktopGL
         {
             switch (noise)
             {
-                case float n when (n >= 0 || n<= 0.3):
+                case float n when (n >= 0 && n <= 0.3):
                     return water;
-                case float n when (n > 0.3 || n <= 0.45 ):
+                case float n when (n > 0.3 && n <= 0.45 ):
                     return sand;
                 default:
                     return grass;
@@ -88,8 +88,6 @@ namespace PerlinNoiseMonogame.DesktopGL
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
