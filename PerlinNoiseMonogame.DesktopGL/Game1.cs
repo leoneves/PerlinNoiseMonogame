@@ -14,8 +14,8 @@ namespace PerlinNoiseMonogame.DesktopGL
         SpriteBatch spriteBatch;
         const int map_width = 100;
         const int map_height = 100;
-        const int width = 800;
-        const int height = 600;
+        const int width = 1024;
+        const int height = 800;
         const int tile_size = 128;
         const int octaveCount = 2;
         Texture2D water;
@@ -60,14 +60,14 @@ namespace PerlinNoiseMonogame.DesktopGL
             float[][] perlinNoise = function.GeneratePerlinNoise(map_width, map_height, octaveCount);
             perlinNoise = function.AdjustLevels(perlinNoise, 0.2f, 0.8f);
             images = new Texture2D[map_width][];
-            for (int x=1; x <= map_width; x++)
+            for (int x=0; x < map_width; x++)
             {
                 var columnOfImgages = new Texture2D[map_height];
-                for (int y=1; y <= map_height; y++)
+                for (int y=0; y < map_height; y++)
                 {
-                    columnOfImgages[y-1] = ChooseTile(perlinNoise[x-1][y-1]);
+                    columnOfImgages[y] = ChooseTile(perlinNoise[x][y]);
                 }
-                images[x-1] = columnOfImgages;
+                images[x] = columnOfImgages;
             }
         }
 
@@ -96,9 +96,9 @@ namespace PerlinNoiseMonogame.DesktopGL
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            for(int x=1; x <= tilesX(); x++)
+            for(int x=0; x < tilesX(); x++)
             {
-                for (int y = 1; y <= tilesY(); y++)
+                for (int y = 0; y < tilesY(); y++)
                 {
                     spriteBatch.Draw(images[x][y], new Vector2(x*tile_size*zoom, y*tile_size*zoom), null, color: Color.White, 0, Vector2.Zero, scale: new Vector2(zoom, zoom), SpriteEffects.None, 0 );
                 }
