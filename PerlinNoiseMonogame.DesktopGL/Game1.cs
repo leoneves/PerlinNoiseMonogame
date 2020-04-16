@@ -102,7 +102,7 @@ namespace PerlinNoiseMonogame.DesktopGL
             {
                 for (int y = 1; y <= tilesY(); y++)
                 {
-                    spriteBatch.Draw(images[x][y], new Vector2(x*tile_size*zoom, y*tile_size*zoom), scale: new Vector2(zoom, zoom), color: Color.White);
+                    spriteBatch.Draw(images[x][y], new Vector2(x*tile_size*zoom, y*tile_size*zoom), null, color: Color.White, 0, Vector2.Zero, scale: new Vector2(zoom, zoom), SpriteEffects.None, 0 );
                 }
             }
             spriteBatch.End();
