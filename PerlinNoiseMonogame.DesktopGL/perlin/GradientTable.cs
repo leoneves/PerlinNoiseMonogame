@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace NoiseFunction
 {
@@ -10,7 +9,7 @@ namespace NoiseFunction
         int dimension = 2;
         NoiseRandom random;
         List<double> table;
-        List<Vector2> vectors;
+        List<double[]> vectors;
 
         public GradientTable(int interval, int dimension)
         {
@@ -28,25 +27,25 @@ namespace NoiseFunction
 
         public void random_unit_vector(int interval)
         {
-            vectors = new List<Vector2>();
-            Vector2 v;
+            vectors = new List<double[]>();
+            double[] v;
             for(int i=0; i<interval;i++)
             {
                 while(true)
                 {
-                    v = new Vector2((float)random.rand() * 2 -1, (float)random.rand() * 2 -1);
+                    v = new double[] { random.rand() * 2 -1, random.rand() * 2 -1 };
                     if ( Magnitude(v) > 0 && Magnitude(v) <= 1)
                         break;
                 }
-                var vector_elements = new double[] { v.X / Magnitude(v), v.Y / Magnitude(v) };
-                vectors.Add(new Vector2((float)vector_elements[0], (float)vector_elements[1]));
+                var vector_elements = new double[] { v[0] / Magnitude(v), v[1] / Magnitude(v) };
+                vectors.Add(new double[] { vector_elements[0], vector_elements[1] });
             }
         }
 
-        public double Magnitude(Vector2 v) 
+        public double Magnitude(double[] v) 
         {
-            var x = Math.Pow(v.X, 2);
-            var y = Math.Pow(v.Y, 2);
+            var x = Math.Pow(v[0], 2);
+            var y = Math.Pow(v[1], 2);
             return Math.Sqrt(x + y);
         }
     }
