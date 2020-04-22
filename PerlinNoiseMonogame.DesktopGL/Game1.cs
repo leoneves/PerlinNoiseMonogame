@@ -17,7 +17,7 @@ namespace PerlinNoiseMonogame.DesktopGL
         const int width = 1024;
         const int height = 800;
         const int tile_size = 128;
-        const int octaveCount = 2;
+        const int octaveCount = 5;
         Texture2D water;
         Texture2D sand;
         Texture2D grass;
@@ -56,28 +56,16 @@ namespace PerlinNoiseMonogame.DesktopGL
 
         private void GenerateMap()
         {
-            PerlinNoise function = new PerlinNoise();
-            float[][] perlinNoise = function.GeneratePerlinNoise(map_width, map_height, octaveCount);
-            perlinNoise = function.AdjustLevels(perlinNoise, 0.2f, 0.8f);
-            images = new Texture2D[map_width][];
-            for (int x=0; x < map_width; x++)
-            {
-                var columnOfImgages = new Texture2D[map_height];
-                for (int y=0; y < map_height; y++)
-                {
-                    columnOfImgages[y] = ChooseTile(perlinNoise[x][y]);
-                }
-                images[x] = columnOfImgages;
-            }
+            PerlinNoise perlin = new PerlinNoise();
         }
 
-        private Texture2D ChooseTile(float noise)
+        private Texture2D ChooseTile(double noise)
         {
             switch (noise)
             {
-                case float n when (n >= 0 && n <= 0.3):
+                case double n when (n >= 0 && n <= 0.3):
                     return water;
-                case float n when (n > 0.3 && n <= 0.45 ):
+                case double n when (n > 0.3 && n <= 0.45 ):
                     return sand;
                 default:
                     return grass;
