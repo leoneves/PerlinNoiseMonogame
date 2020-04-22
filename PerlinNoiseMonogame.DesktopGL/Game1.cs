@@ -57,6 +57,7 @@ namespace PerlinNoiseMonogame.DesktopGL
         private void GenerateMap()
         {
             PerlinNoise perlin = new PerlinNoise();
+            Debug.WriteLine(perlin.GradientTable);
         }
 
         private Texture2D ChooseTile(double noise)

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using static System.Numerics.Vector2;
 
 namespace NoiseFunction
 {
@@ -9,41 +8,46 @@ namespace NoiseFunction
     {
         int interval = 256;
         int dimension = 2;
-        Random random = new Random();
-        float[] table;
+        NoiseRandom random;
+        List<double> table;
         List<Vector2> vectors;
 
         public GradientTable(int interval, int dimension)
         {
             this.interval = interval;
             this.dimension = dimension;
+            random = new NoiseRandom();
 
-            table = new float[] { random.Next(interval) };
+            table = new List<double>();
+            for(int i=0;i<interval;i++)
+            {
+                table.Add(random.Next(interval));
+            }
             random_unit_vector(interval);
         }
 
-        public List<Vector2> random_unit_vector(int interval)
+        public void random_unit_vector(int interval)
         {
             vectors = new List<Vector2>();
             Vector2 v;
-            while(true)
-            {
-                v = new Vector2(random.Next() * 2 -1, random.Next() * 2 -1);
-                if ( Magnitude(v) > 0 && Magnitude(v) <= 1)
-                    break;
-            }
-            var vector_elements = new float[] { v.X / Magnitude(v), v.Y / Magnitude(v) };
             for(int i=0; i<interval;i++)
             {
-                vectors.Add(new Vector2(vector_elements[0], vector_elements[1]));
+                while(true)
+                {
+                    v = new Vector2((float)random.rand() * 2 -1, (float)random.rand() * 2 -1);
+                    if ( Magnitude(v) > 0 && Magnitude(v) <= 1)
+                        break;
+                }
+                var vector_elements = new double[] { v.X / Magnitude(v), v.Y / Magnitude(v) };
+                vectors.Add(new Vector2((float)vector_elements[0], (float)vector_elements[1]));
             }
-            return vectors;
         }
 
-        public float Magnitude(Vector2 v) 
+        public double Magnitude(Vector2 v) 
         {
-            var square_v = SquareRoot(v);
-            return (float)Math.Sqrt(square_v.X + square_v.Y);
+            var x = Math.Pow(v.X, 2);
+            var y = Math.Pow(v.Y, 2);
+            return Math.Sqrt(x + y);
         }
     }
 }
