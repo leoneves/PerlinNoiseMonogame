@@ -8,7 +8,7 @@ namespace NoiseFunction
         int interval = 256;
         int dimension = 2;
         NoiseRandom random;
-        List<double> table;
+        List<int> table;
         List<double[]> vectors;
 
         public GradientTable(int interval, int dimension)
@@ -17,7 +17,7 @@ namespace NoiseFunction
             this.dimension = dimension;
             random = new NoiseRandom();
 
-            table = new List<double>();
+            table = new List<int>();
             for(int i=0;i<interval;i++)
             {
                 table.Add(random.Next(interval));
@@ -47,6 +47,30 @@ namespace NoiseFunction
             var x = Math.Pow(v[0], 2);
             var y = Math.Pow(v[1], 2);
             return Math.Sqrt(x + y);
+        }
+
+        public double[] Vectors(int[] coords)
+        {
+            return vectors[index(coords)];
+        }
+
+        private int index(int[] coords)
+        {
+            var s = coords[1];
+            s = perm(s) + reverse(coords)[1];
+            return perm(s);
+        }
+
+        private int perm(int i)
+        {
+            return table[i % @interval];
+        }
+
+        private int[] reverse(int[] array)
+        {
+            int[] reverse = new int[] { array[0], array[1] };
+            Array.Reverse(reverse);
+            return reverse;
         }
     }
 }
