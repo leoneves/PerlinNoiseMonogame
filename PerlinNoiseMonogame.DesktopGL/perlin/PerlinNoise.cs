@@ -23,15 +23,42 @@ namespace NoiseFunction
             var diff = new double[] { coords[0] - cell[0], coords[1] - cell[1] };
 
             // Calculate noise factor at each surrouning vertex
-            var noise_factor = new Dictionary<int[], double>();
+            var noise_factor = new Dictionary<int[], double>(new ArrayDictionaryCompare());
 
             Action<int[]> calc_noise_factory = (idx) => {
-                idx = new int[2] { idx[0], idx[1] };
+                idx = new int[] { idx[0], idx[1] };
                 var scalar_gradient_point = new int[] { cell[0] + idx[0], cell[1] + idx[1] };
                 var gv = GradientTable.Vectors(scalar_gradient_point);
                 noise_factor.Add(idx, inner_product(gv, subtract(diff, idx)));
             };
             iterate(Dimensaion, 2, calc_noise_factory);
+
+            var dim = Dimensaion;
+
+            for (int i=0;i<diff.Length;i++)
+            {
+                var u = diff[i];
+                var bu = CubicCurve.cubic(u);
+                
+                // Pair-wise interpolation, trimming down dimensions
+                Action<int[]> interpolation = (idx1) => {
+                   if ( idx1[0] != 1 )
+                   {
+                       var idx3 = new int[idx1.Length];
+                       var idx2 = new int[idx1.Length];
+                       if (idx1.Length != 1)
+                       {
+                           idx2 = new int[] { idx1[0], idx1[1] };
+                           idx3 = new int[] { idx1[1] };
+                       }
+                       idx2[0] = 1;
+                       noise_factor[idx3] = noise_factor[idx1] + bu * (noise_factor[idx2] - noise_factor[idx1]);
+                   }
+                };
+                iterate(dim, 2, interpolation);
+                dim--;
+            }
+            return (noise_factor[new int[1]] + 1) * 0.5;
         }
 
         private void iterate(int dim, int length, Action<int[]> block)
