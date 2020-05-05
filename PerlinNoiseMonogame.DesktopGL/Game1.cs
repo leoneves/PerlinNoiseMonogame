@@ -58,14 +58,15 @@ namespace PerlinNoiseMonogame.DesktopGL
         {
             PerlinNoise perlin = new PerlinNoise();
             var contrast = new CubicCurve();
+            images = new Texture2D[map_width][];
             for (int x=0;x<map_width;x++)
             {
-                images = new Texture2D[map_width][];
-
+                images[x] = new Texture2D[map_height];
                 for (int y=0;y<map_height;y++)
                 {
                     var n = perlin.GetPoint(x * 0.1, y * 0.1);
-                    // images[x][y] = 
+                    n = CubicCurve.Contrast(n);
+                    images[x][y] = ChooseTile(n);
                 }
             }
         }
