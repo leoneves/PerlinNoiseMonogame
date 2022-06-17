@@ -1,7 +1,7 @@
 # Perlin Noise Implementation for 2D Games With C#
 
 This Project is a implementation of Perlin Noise in C# only for 2D games.
-Generates maps with edges that make sense for you sprites, like sand close to water. How can you see in examples.
+Generates maps with edges that make sense for your sprites, like sand close to water. How can you see in examples.
 
 ## How to Run
 
